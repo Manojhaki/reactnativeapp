@@ -64,7 +64,7 @@ const AboutNavigator = createStackNavigator(
 );
 const ContactNavigator = createStackNavigator(
     {
-        Home: { screen: Contact }
+        contact: { screen: Contact }
     },
     {
         defaultNavigationOptions: {
