@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
+import { createDrawerNavigator, DrawerNavigatorItems } from 'react-navigation-drawer';
 import { createAppContainer } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,6 +12,18 @@ import CampsiteInfo from './CampsiteInfoComponent';
 import About from './AboutComponent';
 import Contact from './ContactComponent';
 import Constants from 'expo-constants';
+import { connect } from 'react-redux';
+import {
+    fetchCampsites, fetchComments, fetchPromotions,
+    fetchPartners
+} from '../redux/ActionCreators';
+
+const mapDispatchToProps = {
+    fetchCampsites,
+    fetchComments,
+    fetchPromotions,
+    fetchPartners
+};
 
 
 const DirectoryNavigator = createStackNavigator(
@@ -126,6 +138,8 @@ const CustomDrawerContentComponent = props => (
                 </View>
             </View>
 
+            <DrawerNavigatorItems {...props} />
+
         </SafeAreaView>
     </ScrollView>
 );
@@ -190,12 +204,19 @@ const MainNavigator = createDrawerNavigator(
     },
     {
         drawerBackgroundColor: '#CEC8FF',
-        contentComponent: CustomDrawerContentComponent
+        contentComponent: CustomDrawerContentComponent,
     }
 );
 const AppNavigator = createAppContainer(MainNavigator)
 
 class Main extends Component {
+
+    componentDidMount() {
+        this.props.fetchCampsites();
+        this.props.fetchComments();
+        this.props.fetchPromotions();
+        this.props.fetchPartners();
+    }
     render() {
         return (
             <View style={{
@@ -237,4 +258,4 @@ const styles = StyleSheet.create({
     }
 
 });
-export default Main;
+export default connect(null, mapDispatchToProps)(Main);
